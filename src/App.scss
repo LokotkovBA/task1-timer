@@ -6,7 +6,13 @@
 }
 
 .timer {
-    font-size: 8rem;
+    font-size: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    &>input{
+        font-size: 1em;
+    }
 }
 
 .logo {

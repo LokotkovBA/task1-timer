@@ -1,19 +1,34 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect, useRef, useState } from "react";
+import "./App.scss";
 
 function App() {
     const [timestamp, setTimestamp] = useState(0);
+    const intervalRef = useRef<ReturnType<typeof setInterval>>();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setTimestamp((prevStamp) => prevStamp + 1);
-        }, 1000);
         return () => {
-            clearInterval(interval);
+            clearInterval(intervalRef.current);
         };
     }, []);
 
-    return <main className="timer">{parseTimestamp(timestamp)}</main>;
+    function startTimer() {
+        clearInterval(intervalRef.current);
+        if (inputRef.current?.value) {
+            setTimestamp(parseInt(inputRef.current.value));
+        }
+        intervalRef.current = setInterval(() => {
+            setTimestamp((prevTimestamp) => prevTimestamp + 1);
+        }, 1000);
+    }
+
+    return (
+        <main className="timer">
+            <input ref={inputRef} type="number" placeholder="Seconds" />
+            <button onClick={startTimer}>Start</button>
+            {parseTimestamp(timestamp)}
+        </main>
+    );
 }
 export default App;
 
